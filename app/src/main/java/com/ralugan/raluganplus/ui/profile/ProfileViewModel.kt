@@ -1,13 +1,13 @@
-package com.ralugan.raluganplus.ui.search
+package com.ralugan.raluganplus.ui.profile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SearchViewModel : ViewModel() {
+class ProfileViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+        value = "This is Profile Fragment"
     }
     val text: LiveData<String> = _text
 }
