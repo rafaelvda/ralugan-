@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "183993316715",
+    "project_id": "raluganplus",
+    "storage_bucket": "raluganplus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:183993316715:android:8b0fa3ad7b1c00678ec82e",
+        "android_client_info": {
+          "package_name": "com.ralugan.raluganplus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDA_Eaq7s_BpcWUw_PGSofirp9kJIxUSc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
