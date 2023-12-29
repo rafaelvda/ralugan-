@@ -1,0 +1,29 @@
+<!-- Fichier nav_graph.xml -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph">
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.ralugan.raluganplus.ui.profile.ProfileFragment"
+        android:label="ProfileFragment">
+
+        <action
+            android:id="@+id/action_profileFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+    </fragment>
+
+    <!-- Ajoutez la déclaration de signupFragment ici -->
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.ralugan.raluganplus.ui.profile.SignupFragment"
+        android:label="SignupFragment">
+        <!-- ... Définissez d'autres attributs si nécessaire ... -->
+    </fragment>
+
+    <!-- Ajoutez l'action pour naviguer de ProfileFragment à SignupFragment -->
+    <action
+        android:id="@+id/action_profileFragment_to_signupFragment"
+        app:destination="@id/signupFragment" />
+</navigation>
