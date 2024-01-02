@@ -11,6 +11,7 @@
     <!-- Formulaire de connexion -->
     <LinearLayout
         android:id="@+id/loginForm"
+        android:label="@string/login_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -50,11 +51,50 @@
 
     <!-- Bouton d'inscription -->
     <Button
-        android:id="@+id/signupButton"
+        android:id="@+id/signupRedirectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="S'inscrire"
         android:visibility="visible" />
+
+    <!-- Formulaire d'inscription (initialisé comme invisible) -->
+    <LinearLayout
+        android:id="@+id/signupForm"
+        android:label="@string/signup_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/editTextEmailSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email" />
+
+        <EditText
+            android:id="@+id/editTextPasswordSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mot de passe"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/signupButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S'inscrire" />
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retour à la page de connexion"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
     <!-- Bouton de déconnexion -->
     <Button

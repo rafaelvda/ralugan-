@@ -1,5 +1,6 @@
 package com.ralugan.raluganplus.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,11 +34,18 @@ class ProfileFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
-        val loginButton: Button = binding.loginButton
-        val signupButton: Button = binding.signupButton
-        val logoutButton: Button = binding.logoutButton
         val emailEditText: EditText = binding.editTextEmail
         val passwordEditText: EditText = binding.editTextPassword
+        val loginButton: Button = binding.loginButton
+        val signupRedirectButton: Button = binding.signupRedirectButton
+
+        val emailSignUpEditText = binding.editTextEmailSignUp
+        val passwordSignUpEditText = binding.editTextPasswordSignUp
+        val signupButton: Button = binding.signupButton
+        val backButton: Button = binding.backButton
+
+        val logoutButton: Button = binding.logoutButton
+
 
         // Vérifiez si l'utilisateur est connecté
         if (userIsLoggedIn()) {
@@ -53,14 +61,29 @@ class ProfileFragment : Fragment() {
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 signIn(email, password)
             } else {
-                Toast.makeText(requireContext(), "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Veuillez remplir tous les champs afin de vous connectez", Toast.LENGTH_SHORT).show()
             }
         }
 
         signupButton.setOnClickListener {
-            // Utilisez l'action spécifiée dans le fichier de navigation pour naviguer vers le SignupFragment
-            findNavController().navigate(R.id.action_profileFragment_to_signupFragment)
+            val emailSignUp = emailSignUpEditText.text.toString()
+            val passwordSignUp = passwordSignUpEditText.text.toString()
+
+            if (emailSignUp.isNotEmpty() && passwordSignUp.isNotEmpty()) {
+                signUp(emailSignUp, passwordSignUp)
+            } else {
+                Toast.makeText(requireContext(), "Veuillez remplir tous les champs afin de vous inscrire", Toast.LENGTH_SHORT).show()
+            }
         }
+
+        signupRedirectButton.setOnClickListener {
+            showRegistrationForm()
+        }
+
+        backButton.setOnClickListener {
+            showLoginForm()
+        }
+
 
         logoutButton.setOnClickListener {
             signOut()
@@ -80,6 +103,20 @@ class ProfileFragment : Fragment() {
             }
     }
 
+    private fun signUp(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    // Inscription réussie
+                    Toast.makeText(requireContext(), "Inscription réussie", Toast.LENGTH_SHORT).show()
+                    // Rediriger vers la page de profil ou faire d'autres actions nécessaires
+                } else {
+                    // L'inscription a échoué
+                    Toast.makeText(requireContext(), "Erreur d'inscription: ${task.exception?.localizedMessage}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
     private fun signOut() {
         auth.signOut()
         showLoginForm()
@@ -91,18 +128,39 @@ class ProfileFragment : Fragment() {
 
     private fun showLoggedInState() {
         // Cachez le formulaire de connexion, affichez le bouton de déconnexion, etc.
-        binding.loginForm.visibility = View.GONE
-        binding.signupButton.visibility = View.GONE
+        binding.loginForm.visibility = View.INVISIBLE
+        binding.signupButton.visibility = View.INVISIBLE
         binding.logoutButton.visibility = View.VISIBLE
         // Autres opérations liées à l'état connecté
     }
 
     private fun showLoginForm() {
-        // Affichez le formulaire de connexion, cachez le bouton de déconnexion, etc.
         binding.loginForm.visibility = View.VISIBLE
-        binding.signupButton.visibility = View.VISIBLE
+        binding.loginButton.visibility = View.VISIBLE
+        binding.signupRedirectButton.visibility = View.VISIBLE
         binding.logoutButton.visibility = View.GONE
-        // Autres opérations liées à l'état déconnecté
+        binding.logoutMessage.visibility = View.GONE
+
+        binding.signupForm.visibility = View.GONE
+        binding.editTextEmailSignUp.visibility = View.GONE
+        binding.editTextPasswordSignUp.visibility = View.GONE
+        binding.signupButton.visibility = View.GONE
+        binding.backButton.visibility = View.GONE
+    }
+
+
+    private fun showRegistrationForm() {
+        binding.loginForm.visibility = View.GONE
+        binding.loginButton.visibility = View.GONE
+        binding.signupRedirectButton.visibility = View.GONE
+        binding.logoutButton.visibility = View.GONE
+        binding.logoutMessage.visibility = View.GONE
+
+        binding.signupForm.visibility = View.VISIBLE
+        binding.editTextEmailSignUp.visibility = View.VISIBLE
+        binding.editTextPasswordSignUp.visibility = View.VISIBLE
+        binding.signupButton.visibility = View.VISIBLE
+        binding.backButton.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
