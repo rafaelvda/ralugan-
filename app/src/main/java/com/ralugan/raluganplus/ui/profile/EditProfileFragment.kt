@@ -13,8 +13,13 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.google.firebase.database.DatabaseError
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.ralugan.raluganplus.R
 import com.ralugan.raluganplus.databinding.FragmentEditprofileBinding
@@ -58,6 +63,40 @@ class EditProfileFragment : Fragment() {
 
         // Trouver le bouton par son ID
         val selectImageButton: Button = view.findViewById(R.id.selectImageButton)
+
+        // Récupérer l'UID de l'utilisateur actuellement connecté
+        val currentUserId = auth.currentUser?.uid
+
+        // Référence à la base de données Firebase Realtime
+        val databaseReference = FirebaseDatabase.getInstance().reference
+
+        // Vérifier si l'UID est non nul
+        currentUserId?.let { userId ->
+            // Référence spécifique à l'utilisateur dans la base de données
+            val userReference = databaseReference.child("users").child(userId)
+
+            // Écouter les changements dans la base de données pour cet utilisateur
+            userReference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        // Récupérer les données de l'utilisateur
+                        val firstName = snapshot.child("firstName").value.toString()
+                        val imageUrl = snapshot.child("imageUrl").value.toString()
+
+                        // Mettre à jour les champs d'édition et l'URL de l'image
+                        firstNameEditText.setText(firstName)
+                        imageUri = Uri.parse(imageUrl)
+
+                        // Charger et afficher l'image avec votre méthode
+                        loadImage(imageUrl)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Gérer les erreurs de lecture depuis la base de données
+                }
+            })
+        }
 
         // Ajouter un gestionnaire de clic au bouton
         selectImageButton.setOnClickListener {
@@ -111,6 +150,16 @@ class EditProfileFragment : Fragment() {
     private fun editProfile(password: String, firstName: String, imageUri: Uri?) {
 
     }
+
+    private fun loadImage(imageUrl: String) {
+        // Utiliser une bibliothèque comme Picasso ou Glide pour charger et afficher l'image
+        // Exemple avec Picasso :
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .apply(RequestOptions.circleCropTransform()) // Option pour afficher une image circulaire, facultatif
+            .into(imageView)
+    }
+
 
     private fun signUp(email: String, password: String, firstName: String, imageUri: Uri?) {
         auth.createUserWithEmailAndPassword(email, password)
