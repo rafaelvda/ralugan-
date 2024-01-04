@@ -8,117 +8,6 @@
     android:gravity="center"
     tools:context=".ui.profile.ProfileFragment">
 
-    <!-- Formulaire de connexion -->
-    <LinearLayout
-        android:id="@+id/loginForm"
-        android:label="@string/login_profile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp"
-        android:visibility="visible">
-
-        <EditText
-            android:id="@+id/editTextEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email" />
-
-        <EditText
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Mot de passe"
-            android:inputType="textPassword" />
-
-        <Button
-            android:id="@+id/loginButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Se connecter" />
-    </LinearLayout>
-
-    <!-- Message de connexion/déconnexion -->
-    <TextView
-        android:id="@+id/logoutMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Vous êtes connecté."
-        android:visibility="gone"
-        android:textColor="@android:color/holo_green_dark"
-        android:textSize="16sp" />
-
-    <!-- Bouton d'inscription -->
-    <Button
-        android:id="@+id/signupRedirectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="S'inscrire"
-        android:visibility="visible" />
-
-    <!-- Formulaire d'inscription (initialisé comme invisible) -->
-    <LinearLayout
-        android:id="@+id/signupForm"
-        android:label="@string/signup_profile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp"
-        android:visibility="gone">
-
-        <!-- ImageView pour afficher l'image sélectionnée -->
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal"
-            app:backgroundTint="@color/white"
-            android:scaleType="centerCrop"/>
-
-
-        <!-- Button pour sélectionner une image -->
-        <Button
-            android:id="@+id/selectImageButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sélectionner une image"/>
-
-        <EditText
-            android:id="@+id/editTextFirstName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Prénom" />
-
-        <EditText
-            android:id="@+id/editTextEmailSignUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email" />
-
-        <EditText
-            android:id="@+id/editTextPasswordSignUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Mot de passe"
-            android:inputType="textPassword" />
-
-        <Button
-            android:id="@+id/signupButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="S'inscrire" />
-
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Retour à la page de connexion"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
 
     <!-- PAGE DE PROFIL -->
     <ImageView
@@ -238,20 +127,17 @@
             android:background="@android:color/holo_purple"
             android:layout_marginBottom="8dp" />
 
-        <!-- Ajoutez autant de boutons que nécessaire -->
+        <!-- Bouton de déconnexion -->
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Se déconnecter"
+            android:background="@android:color/holo_red_light"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
 
-
-    <!-- Bouton de déconnexion -->
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Se déconnecter"
-        android:background="@android:color/holo_red_light"
-        android:textColor="@color/black"
-        android:visibility="gone" />
 
 </LinearLayout>

@@ -1,0 +1,60 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".ui.profile.LoginFragment">
+
+    <!-- Formulaire de connexion -->
+    <LinearLayout
+        android:id="@+id/loginForm"
+        android:label="@string/title_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp"
+        android:visibility="visible">
+
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email" />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mot de passe"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Se connecter" />
+    </LinearLayout>
+
+    <!-- Message de connexion/déconnexion -->
+    <TextView
+        android:id="@+id/logoutMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vous êtes connecté."
+        android:visibility="gone"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="16sp" />
+
+    <!-- Bouton d'inscription -->
+    <Button
+        android:id="@+id/signupRedirectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="S'inscrire"
+        android:visibility="visible" />
+
+</LinearLayout>

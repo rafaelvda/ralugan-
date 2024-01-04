@@ -27,5 +27,19 @@
         android:id="@+id/navigation_profile"
         android:name="com.ralugan.raluganplus.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_download" />
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/navigation_login"
+        android:name="com.ralugan.raluganplus.ui.profile.LoginFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:id="@+id/navigation_signup"
+        android:name="com.ralugan.raluganplus.ui.profile.SignupFragment"
+        android:label="@string/title_signup"
+        tools:layout="@layout/fragment_signup" />
+
+
 </navigation>
