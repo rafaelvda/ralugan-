@@ -2,18 +2,28 @@ package com.ralugan.raluganplus.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.ralugan.raluganplus.databinding.FragmentProfileBinding
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import com.ralugan.raluganplus.R
+import java.lang.Exception
 
 class ProfileFragment : Fragment() {
 
@@ -52,7 +62,55 @@ class ProfileFragment : Fragment() {
         // Vérifiez si l'utilisateur est connecté
         if (userIsLoggedIn()) {
             showLoggedInState()
-        } else {
+
+            val logoImageView: ImageView = binding.logoImageView
+            val userNameTextView: TextView = binding.userNameTextView
+
+            // Récupérez le prénom de l'utilisateur depuis la base de données
+            val user = auth.currentUser
+            val uid = user?.uid
+
+            if (uid != null) {
+                val database = FirebaseDatabase.getInstance()
+                val usersRef = database.getReference("users")
+
+                usersRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            val firstName = snapshot.child("firstName").value.toString()
+                            val imageUrl = snapshot.child("imageUrl").value.toString()
+
+                            if (!imageUrl.isNullOrEmpty()) {
+                                // Utilisez Glide pour charger l'image dans votre ImageView
+                                Glide.with(requireContext())
+                                    .load(imageUrl)
+                                    .circleCrop()
+                                    .into(logoImageView)
+                            } else {
+                                // Gérer le cas où l'URL de l'image est vide ou nulle
+                                Log.e("DEBUG", "Image URL is empty or null")
+                            }
+                            // Affichez le prénom de l'utilisateur
+                            userNameTextView.text = "$firstName"
+
+
+                        }
+                        else {
+                            print("NOT EXISTS")
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        // Gérez les erreurs ici
+                        Log.e("ERROR", "DatabaseError: ${error.message}")
+                    }
+                })
+            }
+            else {
+                print("UID NULL")
+            }
+
+    } else {
             showLoginForm()
         }
 
@@ -162,11 +220,26 @@ class ProfileFragment : Fragment() {
 
     private fun showLoggedInState() {
         // Cachez le formulaire de connexion, affichez le bouton de déconnexion, etc.
-        binding.loginForm.visibility = View.INVISIBLE
-        binding.signupButton.visibility = View.INVISIBLE
+        binding.loginForm.visibility = View.GONE
+        binding.signupButton.visibility = View.GONE
+        binding.signupRedirectButton.visibility = View.GONE
+
+        binding.logoImageView.visibility = View.VISIBLE
+        binding.userNameTextView.visibility = View.VISIBLE
+        binding.button1.visibility = View.VISIBLE
+        binding.button2.visibility = View.VISIBLE
+        binding.button3.visibility = View.VISIBLE
+        binding.button4.visibility = View.VISIBLE
+        binding.button5.visibility = View.VISIBLE
+        binding.button6.visibility = View.VISIBLE
+        binding.trait1.visibility = View.VISIBLE
+        binding.trait2.visibility = View.VISIBLE
+        binding.trait3.visibility = View.VISIBLE
+        binding.trait4.visibility = View.VISIBLE
+        binding.trait5.visibility = View.VISIBLE
+        binding.trait6.visibility = View.VISIBLE
         binding.logoutButton.visibility = View.VISIBLE
 
-        binding.signupRedirectButton.visibility = View.GONE
         // Autres opérations liées à l'état connecté
     }
 
@@ -174,14 +247,29 @@ class ProfileFragment : Fragment() {
         binding.loginForm.visibility = View.VISIBLE
         binding.loginButton.visibility = View.VISIBLE
         binding.signupRedirectButton.visibility = View.VISIBLE
-        binding.logoutButton.visibility = View.GONE
-        binding.logoutMessage.visibility = View.GONE
 
         binding.signupForm.visibility = View.GONE
         binding.editTextEmailSignUp.visibility = View.GONE
         binding.editTextPasswordSignUp.visibility = View.GONE
         binding.signupButton.visibility = View.GONE
         binding.backButton.visibility = View.GONE
+
+        binding.logoImageView.visibility = View.GONE
+        binding.userNameTextView.visibility = View.GONE
+        binding.button1.visibility = View.GONE
+        binding.button2.visibility = View.GONE
+        binding.button3.visibility = View.GONE
+        binding.button4.visibility = View.GONE
+        binding.button5.visibility = View.GONE
+        binding.button6.visibility = View.GONE
+        binding.trait1.visibility = View.GONE
+        binding.trait2.visibility = View.GONE
+        binding.trait3.visibility = View.GONE
+        binding.trait4.visibility = View.GONE
+        binding.trait5.visibility = View.GONE
+        binding.trait6.visibility = View.GONE
+        binding.logoutButton.visibility = View.GONE
+        binding.logoutMessage.visibility = View.GONE
     }
 
 

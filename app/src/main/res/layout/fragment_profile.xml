@@ -102,12 +102,139 @@
 
     </LinearLayout>
 
+
+    <!-- PAGE DE PROFIL -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        app:backgroundTint="@color/white"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/userNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="32dp"/>
+
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Ajoutez vos boutons ici -->
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bouton 1"
+            android:textColor="#FFFFFF"/>
+
+        <View
+            android:id="@+id/trait1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_purple"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bouton 2"
+            android:layout_marginBottom="8dp"
+            android:textColor="#FFFFFF"/>
+
+        <View
+            android:id="@+id/trait2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_purple"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bouton 3"
+            android:layout_marginBottom="8dp"
+            android:textColor="#FFFFFF"/>
+
+        <View
+            android:id="@+id/trait3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_purple"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bouton 4"
+            android:layout_marginBottom="8dp"
+            android:textColor="#FFFFFF"/>
+
+        <View
+            android:id="@+id/trait4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_purple"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bouton 5"
+            android:layout_marginBottom="8dp"
+            android:textColor="#FFFFFF"/>
+
+        <View
+            android:id="@+id/trait5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_purple"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bouton 6"
+            android:layout_marginBottom="8dp"
+            android:textColor="#FFFFFF"/>
+
+        <View
+            android:id="@+id/trait6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_purple"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Ajoutez autant de boutons que nécessaire -->
+
+    </LinearLayout>
+
+
+
     <!-- Bouton de déconnexion -->
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Se déconnecter"
+        android:background="@android:color/holo_red_light"
+        android:textColor="@color/black"
         android:visibility="gone" />
 
 </LinearLayout>
