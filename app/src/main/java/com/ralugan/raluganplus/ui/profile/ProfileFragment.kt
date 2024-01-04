@@ -131,6 +131,8 @@ class ProfileFragment : Fragment() {
         binding.loginForm.visibility = View.INVISIBLE
         binding.signupButton.visibility = View.INVISIBLE
         binding.logoutButton.visibility = View.VISIBLE
+
+        binding.signupRedirectButton.visibility = View.GONE
         // Autres opérations liées à l'état connecté
     }
 
