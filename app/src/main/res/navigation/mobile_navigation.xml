@@ -41,5 +41,11 @@
         android:label="@string/title_signup"
         tools:layout="@layout/fragment_signup" />
 
+    <fragment
+        android:id="@+id/navigation_editprofile"
+        android:name="com.ralugan.raluganplus.ui.profile.EditProfileFragment"
+        android:label="@string/title_editprofile"
+        tools:layout="@layout/fragment_editprofile" />
+
 
 </navigation>

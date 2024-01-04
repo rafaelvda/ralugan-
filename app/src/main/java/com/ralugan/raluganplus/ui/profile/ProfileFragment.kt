@@ -1,6 +1,7 @@
 package com.ralugan.raluganplus.ui.profile
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -34,8 +35,6 @@ class ProfileFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
 
-    private var imageUri: Uri? = null
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,13 +42,18 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
-    lateinit var imageView: ImageView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
 
+        val editProfileButton: Button = view.findViewById(R.id.editProfileButton)
+        val watchListButton: Button = view.findViewById(R.id.watchListButton)
+        val settingsButton: Button = view.findViewById(R.id.settingsButton)
+        val accountButton: Button = view.findViewById(R.id.accountButton)
+        val legalButton: Button = view.findViewById(R.id.legalButton)
+        val helpButton: Button = view.findViewById(R.id.helpButton)
         val logoutButton: Button = binding.logoutButton
 
 
@@ -57,6 +61,34 @@ class ProfileFragment : Fragment() {
         if (userIsLoggedIn()) {
             val logoImageView: ImageView = binding.logoImageView
             val userNameTextView: TextView = binding.userNameTextView
+
+            editProfileButton.setOnClickListener {
+                findNavController().navigate(R.id.navigation_editprofile)
+            }
+
+            watchListButton.setOnClickListener {
+                showUnderConstructionDialog()
+            }
+
+            settingsButton.setOnClickListener {
+                showUnderConstructionDialog()
+            }
+
+            accountButton.setOnClickListener {
+                showUnderConstructionDialog()
+            }
+
+            legalButton.setOnClickListener {
+                showUnderConstructionDialog()
+            }
+
+            helpButton.setOnClickListener {
+                showUnderConstructionDialog()
+            }
+
+            logoutButton.setOnClickListener {
+                showLogoutConfirmationDialog()
+            }
 
             // Récupérez le prénom de l'utilisateur depuis la base de données
             val user = auth.currentUser
@@ -106,62 +138,7 @@ class ProfileFragment : Fragment() {
         else {
             findNavController().navigate(R.id.navigation_login)
         }
-
-
-        logoutButton.setOnClickListener {
-            signOut()
-        }
     }
-
-
-    // Fonction pour télécharger une image sur Firebase Storage
-    private fun uploadImageToFirebaseStorage(uid: String, imageUri: Uri) {
-        val storageRef = FirebaseStorage.getInstance().getReference("userProfile")
-        val imageRef = storageRef.child("image_${System.currentTimeMillis()}.jpeg")
-
-        imageRef.putFile(imageUri)
-            .addOnSuccessListener { taskSnapshot ->
-                // L'image a été téléchargée avec succès
-                // Récupérez l'URL de téléchargement
-                imageRef.downloadUrl.addOnSuccessListener { uri ->
-                    // Mettez à jour la base de données avec l'URL de l'image
-                    updateProfileImageInDatabase(uid, uri.toString())
-                }
-            }
-            .addOnFailureListener { exception ->
-                // Une erreur s'est produite lors du téléchargement de l'image
-                Toast.makeText(
-                    requireContext(),
-                    "Erreur de téléchargement de l'image: ${exception.localizedMessage}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-    }
-
-    private fun updateProfileImageInDatabase(uid: String, imageUrl: String) {
-        val database = FirebaseDatabase.getInstance()
-        val usersRef = database.getReference("users")
-
-        // Mettez à jour l'URL de l'image dans la base de données
-        usersRef.child(uid).child("imageUrl").setValue(imageUrl)
-            .addOnCompleteListener { dbTask ->
-                if (dbTask.isSuccessful) {
-                    // Succès de la mise à jour de l'image dans la base de données
-                    Toast.makeText(
-                        requireContext(),
-                        "Image de profil mise à jour avec succès",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Erreur de mise à jour de l'image de profil dans la base de données",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-    }
-
 
     private fun signOut() {
         auth.signOut()
@@ -178,22 +155,35 @@ class ProfileFragment : Fragment() {
         _binding = null
     }
 
+    private fun showUnderConstructionDialog() {
+        // Créez une boîte de dialogue (AlertDialog) pour afficher le message "En construction"
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("En cours de construction")
+        builder.setMessage("Nous travaillons sur cette fonctionnalité. Revenez bientôt pour les dernières mises à jour !")
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
 
-    // Assurez-vous de définir le code de demande IMAGE_PICK_CODE
-    companion object {
-        const val IMAGE_PICK_CODE = 1000
+        // Affichez la boîte de dialogue
+        val dialog = builder.create()
+        dialog.show()
     }
 
-    // Gérez le résultat de la sélection d'image dans onActivityResult
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            // L'utilisateur a sélectionné une image
-            imageUri = data.data
-            // Mettez à jour l'ImageView avec l'image sélectionnée
-            imageView.setImageURI(imageUri)
+    private fun showLogoutConfirmationDialog() {
+        // Créez une boîte de dialogue (AlertDialog) pour confirmer la déconnexion
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Déconnexion")
+        builder.setMessage("Voulez-vous vraiment vous déconnecter ?")
+        builder.setPositiveButton("Déconnexion") { _, _ ->
+            signOut()
         }
+        builder.setNegativeButton("Annuler") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        // Affichez la boîte de dialogue
+        val dialog = builder.create()
+        dialog.show()
     }
 
 

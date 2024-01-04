@@ -27,7 +27,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="32dp"/>
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/editProfileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modifier le profil"
+        android:padding="12dp"
+        android:layout_marginBottom="32dp"
+        android:textColor="#FFFFFF"/>
+
 
 
     <LinearLayout
@@ -39,10 +49,10 @@
 
         <!-- Ajoutez vos boutons ici -->
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/watchListButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bouton 1"
+            android:text="Favoris"
             android:textColor="#FFFFFF"/>
 
         <View
@@ -53,10 +63,10 @@
             android:layout_marginBottom="8dp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/settingsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bouton 2"
+            android:text="Paramètres"
             android:layout_marginBottom="8dp"
             android:textColor="#FFFFFF"/>
 
@@ -68,10 +78,10 @@
             android:layout_marginBottom="8dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/accountButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bouton 3"
+            android:text="Compte"
             android:layout_marginBottom="8dp"
             android:textColor="#FFFFFF"/>
 
@@ -83,10 +93,10 @@
             android:layout_marginBottom="8dp" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/legalButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bouton 4"
+            android:text="Légal"
             android:layout_marginBottom="8dp"
             android:textColor="#FFFFFF"/>
 
@@ -98,10 +108,10 @@
             android:layout_marginBottom="8dp" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/helpButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bouton 5"
+            android:text="Aide"
             android:layout_marginBottom="8dp"
             android:textColor="#FFFFFF"/>
 
@@ -113,10 +123,10 @@
             android:layout_marginBottom="8dp" />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/logoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bouton 6"
+            android:text="Se déconnecter"
             android:layout_marginBottom="8dp"
             android:textColor="#FFFFFF"/>
 
@@ -126,15 +136,6 @@
             android:layout_height="1dp"
             android:background="@android:color/holo_purple"
             android:layout_marginBottom="8dp" />
-
-        <!-- Bouton de déconnexion -->
-        <Button
-            android:id="@+id/logoutButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Se déconnecter"
-            android:background="@android:color/holo_red_light"
-            android:textColor="@color/black"/>
 
     </LinearLayout>
 

@@ -17,12 +17,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.ralugan.raluganplus.R
+import com.ralugan.raluganplus.databinding.FragmentEditprofileBinding
+
 import com.ralugan.raluganplus.databinding.FragmentLoginBinding
 import com.ralugan.raluganplus.databinding.FragmentSignupBinding
 
-class SignupFragment : Fragment() {
+class EditProfileFragment : Fragment() {
 
-    private var _binding: FragmentSignupBinding? = null
+    private var _binding: FragmentEditprofileBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var auth: FirebaseAuth
@@ -35,7 +37,7 @@ class SignupFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSignupBinding.inflate(inflater, container, false)
+        _binding = FragmentEditprofileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,10 +46,11 @@ class SignupFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
-        val firstNameEditText: EditText = binding.editTextFirstName // Ajout du champ de prénom
-        val emailSignUpEditText = binding.editTextEmailSignUp
-        val passwordSignUpEditText = binding.editTextPasswordSignUp
-        val signupButton: Button = binding.signupButton
+        val firstNameEditText: EditText = binding.editTextFirstName
+        val passwordEditText = binding.editTextPassword
+        val confirmPasswordEditText = binding.editTextConfirmPassword
+
+        val confirmButton: Button = binding.confirmButton
         val backButton: Button = binding.backButton
 
         // Initialiser l'ImageView
@@ -64,13 +67,33 @@ class SignupFragment : Fragment() {
             startActivityForResult(intent, IMAGE_PICK_CODE)
         }
 
-        signupButton.setOnClickListener {
+        confirmButton.setOnClickListener {
             val firstName = firstNameEditText.text.toString()
-            val emailSignUp = emailSignUpEditText.text.toString()
-            val passwordSignUp = passwordSignUpEditText.text.toString()
-            if (emailSignUp.isNotEmpty() && passwordSignUp.isNotEmpty() && firstName.isNotEmpty()) {
-                signUp(emailSignUp, passwordSignUp, firstName, imageUri)
-            } else {
+            val password = passwordEditText.text.toString()
+            val confirmPassword = passwordEditText.text.toString()
+
+            if(imageUri != null && firstName.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
+                editProfile(password, firstName, imageUri)
+            }
+            else if (firstName.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
+                editProfile(password, firstName, imageUri)
+            }
+            else if (imageUri != null && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
+                editProfile(password, firstName, imageUri)
+            }
+            else if (password.isNotEmpty() && confirmPassword.isNotEmpty()) {
+                editProfile(password, firstName, imageUri)
+            }
+            else if (imageUri != null && firstName.isNotEmpty()) {
+                editProfile(password, firstName, imageUri)
+            }
+            else if (firstName.isNotEmpty()){
+                editProfile(password, firstName, imageUri)
+            }
+            else if (imageUri != null){
+                editProfile(password, firstName, imageUri)
+            }
+            else {
                 Toast.makeText(
                     requireContext(),
                     "Veuillez remplir tous les champs afin de vous inscrire",
@@ -80,8 +103,12 @@ class SignupFragment : Fragment() {
         }
 
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.navigation_login)
+            findNavController().navigate(R.id.navigation_profile)
         }
+
+    }
+
+    private fun editProfile(password: String, firstName: String, imageUri: Uri?) {
 
     }
 
