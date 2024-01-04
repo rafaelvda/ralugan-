@@ -68,6 +68,23 @@
         android:padding="16dp"
         android:visibility="gone">
 
+        <!-- ImageView pour afficher l'image sélectionnée -->
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            app:backgroundTint="@color/white"
+            android:scaleType="centerCrop"/>
+
+
+        <!-- Button pour sélectionner une image -->
+        <Button
+            android:id="@+id/selectImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sélectionner une image"/>
+
         <EditText
             android:id="@+id/editTextFirstName"
             android:layout_width="match_parent"
