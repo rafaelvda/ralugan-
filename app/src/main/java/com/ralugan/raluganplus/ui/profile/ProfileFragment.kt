@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.ralugan.raluganplus.databinding.FragmentProfileBinding
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.database.FirebaseDatabase
 import com.ralugan.raluganplus.R
 
 class ProfileFragment : Fragment() {
@@ -39,6 +40,7 @@ class ProfileFragment : Fragment() {
         val loginButton: Button = binding.loginButton
         val signupRedirectButton: Button = binding.signupRedirectButton
 
+        val firstNameEditText: EditText = binding.editTextFirstName // Ajout du champ de prénom
         val emailSignUpEditText = binding.editTextEmailSignUp
         val passwordSignUpEditText = binding.editTextPasswordSignUp
         val signupButton: Button = binding.signupButton
@@ -66,11 +68,12 @@ class ProfileFragment : Fragment() {
         }
 
         signupButton.setOnClickListener {
+            val firstName = firstNameEditText.text.toString()
             val emailSignUp = emailSignUpEditText.text.toString()
             val passwordSignUp = passwordSignUpEditText.text.toString()
 
-            if (emailSignUp.isNotEmpty() && passwordSignUp.isNotEmpty()) {
-                signUp(emailSignUp, passwordSignUp)
+            if (emailSignUp.isNotEmpty() && passwordSignUp.isNotEmpty() && firstName.isNotEmpty()) {
+                signUp(emailSignUp, passwordSignUp, firstName)
             } else {
                 Toast.makeText(requireContext(), "Veuillez remplir tous les champs afin de vous inscrire", Toast.LENGTH_SHORT).show()
             }
@@ -103,16 +106,47 @@ class ProfileFragment : Fragment() {
             }
     }
 
-    private fun signUp(email: String, password: String) {
+    private fun signUp(email: String, password: String, firstName : String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    // Inscription réussie
-                    Toast.makeText(requireContext(), "Inscription réussie", Toast.LENGTH_SHORT).show()
-                    // Rediriger vers la page de profil ou faire d'autres actions nécessaires
-                } else {
-                    // L'inscription a échoué
-                    Toast.makeText(requireContext(), "Erreur d'inscription: ${task.exception?.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    // Enregistrement des données dans la base de données Realtime Firebase
+                    val user = auth.currentUser
+                    val uid = user?.uid
+
+                    if (uid != null) {
+                        val database = FirebaseDatabase.getInstance()
+                        val usersRef = database.getReference("users")
+
+                        val userMap = HashMap<String, Any>()
+                        userMap["uid"] = uid
+                        userMap["email"] = email
+                        userMap["firstName"] = firstName
+                        usersRef.child(uid).setValue(userMap)
+                            .addOnCompleteListener { dbTask ->
+                                if (dbTask.isSuccessful) {
+                                    // Succès de l'enregistrement dans la base de données
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Inscription réussie",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Erreur d'enregistrement dans la base de données",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                    } else {
+                        // L'inscription a échoué
+                        Toast.makeText(
+                            requireContext(),
+                            "Erreur d'inscription: ${task.exception?.localizedMessage}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
     }
