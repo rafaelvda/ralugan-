@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,16 +17,17 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DatabaseError
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.ralugan.raluganplus.R
 import com.ralugan.raluganplus.databinding.FragmentEditprofileBinding
-
-import com.ralugan.raluganplus.databinding.FragmentLoginBinding
-import com.ralugan.raluganplus.databinding.FragmentSignupBinding
 
 class EditProfileFragment : Fragment() {
 
@@ -52,8 +54,8 @@ class EditProfileFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
 
         val firstNameEditText: EditText = binding.editTextFirstName
-        val passwordEditText = binding.editTextPassword
-        val confirmPasswordEditText = binding.editTextConfirmPassword
+        val currentPasswordEditText = binding.editTextCurrentPassword
+        val newPasswordEditText = binding.editTextNewPassword
 
         val confirmButton: Button = binding.confirmButton
         val backButton: Button = binding.backButton
@@ -108,37 +110,10 @@ class EditProfileFragment : Fragment() {
 
         confirmButton.setOnClickListener {
             val firstName = firstNameEditText.text.toString()
-            val password = passwordEditText.text.toString()
-            val confirmPassword = passwordEditText.text.toString()
+            val currentPassword = currentPasswordEditText.text.toString()
+            val newPassword = newPasswordEditText.text.toString()
 
-            if(imageUri != null && firstName.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
-                editProfile(password, firstName, imageUri)
-            }
-            else if (firstName.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
-                editProfile(password, firstName, imageUri)
-            }
-            else if (imageUri != null && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
-                editProfile(password, firstName, imageUri)
-            }
-            else if (password.isNotEmpty() && confirmPassword.isNotEmpty()) {
-                editProfile(password, firstName, imageUri)
-            }
-            else if (imageUri != null && firstName.isNotEmpty()) {
-                editProfile(password, firstName, imageUri)
-            }
-            else if (firstName.isNotEmpty()){
-                editProfile(password, firstName, imageUri)
-            }
-            else if (imageUri != null){
-                editProfile(password, firstName, imageUri)
-            }
-            else {
-                Toast.makeText(
-                    requireContext(),
-                    "Veuillez remplir tous les champs afin de vous inscrire",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            editProfile(currentPassword, newPassword, firstName, imageUri)
         }
 
         backButton.setOnClickListener {
@@ -147,8 +122,167 @@ class EditProfileFragment : Fragment() {
 
     }
 
-    private fun editProfile(password: String, firstName: String, imageUri: Uri?) {
+    private fun editProfile(currentPassword: String, newPassword: String, firstName: String, imageUri: Uri?) {
+        val user = auth.currentUser
 
+        var profileUpdated = false
+
+        // Vérifier si l'utilisateur est connecté
+        if (user != null) {
+            // Vérifier si un changement d'image est demandé
+            if (imageUri != null) {
+                // Mettre à jour l'image de profil
+                updateProfileImage(user.uid, imageUri)
+                profileUpdated = true
+            }
+
+            // Vérifier si un changement de prénom est demandé
+            if (firstName != user.displayName) {
+                // Mettre à jour le prénom de l'utilisateur
+                updateFirstName(user.uid, firstName)
+                profileUpdated = true
+            }
+
+            // Vérifier si un changement de mot de passe est demandé
+            if (currentPassword.isNotEmpty() && newPassword.isNotEmpty()) {
+                val credential = EmailAuthProvider.getCredential(user.email!!, currentPassword)
+
+                // Prompt the user to reauthenticate
+                user.reauthenticate(credential)
+                    .addOnCompleteListener { reauthTask ->
+                        if (reauthTask.isSuccessful) {
+                            // User has been reauthenticated, proceed with password update
+                            updatePassword(user, newPassword)
+                            profileUpdated = true
+                        } else {
+                            profileUpdated = false
+                            // Reauthentication failed, handle the error
+                            Toast.makeText(
+                                requireContext(),
+                                "Le mot de passe actuel est incorrect",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+            } else {
+                // Si aucune mise à jour de mot de passe n'est nécessaire, afficher le message
+                showSuccessMessage(profileUpdated)
+            }
+        }
+    }
+
+    private fun showSuccessMessage(success: Boolean) {
+        // Afficher le message uniquement si toutes les mises à jour ont été effectuées avec succès
+        if (success) {
+            Toast.makeText(
+                requireContext(),
+                "Profil mis à jour avec succès",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun updateFirstName(userId: String, newFirstName: String) {
+        val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+        val usersReference: DatabaseReference = database.getReference("users")
+
+        // Mettre à jour le prénom de l'utilisateur dans la base de données
+        usersReference.child(userId).child("firstName").setValue(newFirstName)
+            .addOnSuccessListener {
+                // Succès de la mise à jour
+                Log.d("ProfileUpdate", "Prénom mis à jour avec succès")
+            }
+            .addOnFailureListener {
+                // Échec de la mise à jour
+                Log.d("ProfileUpdate", "Échec de la mise à jour du prénom")
+            }
+    }
+
+    private fun updatePassword(user: FirebaseUser, newPassword: String) {
+        user.updatePassword(newPassword)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Succès de la mise à jour du mot de passe
+                    showSuccessMessage(true)
+                } else {
+                    // Échec de la mise à jour du mot de passe
+                    Toast.makeText(
+                        requireContext(),
+                        "Échec de la mise à jour du mot de passe: ${task.exception?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    showSuccessMessage(false)
+                }
+            }
+    }
+
+
+    private fun updateProfileImage(userId: String, imageUri: Uri) {
+        // Référence à l'emplacement actuel de l'image de profil
+        val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+        val storage: FirebaseStorage = FirebaseStorage.getInstance()
+        val storageReference: StorageReference = storage.getReference("userProfile")
+            .child("image_${System.currentTimeMillis()}.jpeg")
+
+        // Récupérer l'ancien lien de l'image de profil
+        databaseReference.child("imageUrl").get().addOnSuccessListener { dataSnapshot ->
+            val oldImageUrl: String? = dataSnapshot.value as? String
+
+            // Si une ancienne image existe, la supprimer
+            if (!oldImageUrl.isNullOrEmpty()) {
+                val oldImageReference: StorageReference = storage.getReferenceFromUrl(oldImageUrl)
+                oldImageReference.delete().addOnSuccessListener {
+                    // Succès de la suppression de l'ancienne image
+                    Log.d("ProfileUpdate", "Ancienne image supprimée avec succès.")
+                }.addOnFailureListener {
+                    // Échec de la suppression de l'ancienne image
+                    Log.e("ProfileUpdate", "Échec de la suppression de l'ancienne image.", it)
+                }
+            }
+
+            // Télécharger la nouvelle image sur Firebase Storage
+            storageReference.putFile(imageUri)
+                .addOnSuccessListener {
+                    // Succès du téléchargement
+                    // Récupérer le lien de téléchargement de la nouvelle image téléchargée
+                    storageReference.downloadUrl.addOnSuccessListener { downloadUri ->
+                        // Mettre à jour le lien de la nouvelle image de profil dans la base de données
+                        updateProfileImageUrl(userId, downloadUri.toString())
+                    }.addOnFailureListener {
+                        // Échec de la récupération du lien de téléchargement
+                        Log.d("ProfileUpdate", "Échec de la récupération du lien de téléchargement")
+                    }
+                }
+                .addOnFailureListener {
+                    // Échec du téléchargement
+                    Log.d("ProfileUpdate", "Échec du téléchargement de la nouvelle image de profil")
+                }
+        }.addOnFailureListener {
+            // Échec de la récupération de l'ancien lien de l'image de profil
+            Log.d("ProfileUpdate", "Échec de la récupération de l'ancien lien de l'image de profil")
+        }
+    }
+
+    private fun updateProfileImageUrl(userId: String, imageUrl: String) {
+        val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+        val usersReference: DatabaseReference = database.getReference("users")
+
+        // Mettre à jour le lien de l'image de profil dans la base de données
+        usersReference.child(userId).child("imageUrl").setValue(imageUrl)
+            .addOnSuccessListener {
+                // Succès de la mise à jour
+                Log.d("ProfileUpdate", "Image de profil mise à jour avec succès")
+            }
+            .addOnFailureListener {
+                // Échec de la mise à jour
+                Log.d("ProfileUpdate", "Échec de la récupération de l'ancien lien de l'image de profil")
+            }
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun loadImage(imageUrl: String) {
@@ -159,119 +293,6 @@ class EditProfileFragment : Fragment() {
             .apply(RequestOptions.circleCropTransform()) // Option pour afficher une image circulaire, facultatif
             .into(imageView)
     }
-
-
-    private fun signUp(email: String, password: String, firstName: String, imageUri: Uri?) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    // Enregistrement des données dans la base de données Realtime Firebase
-                    val user = auth.currentUser
-                    val uid = user?.uid
-
-                    if (uid != null) {
-                        if (imageUri != null) {
-                            uploadImageToFirebaseStorage(uid, imageUri)
-                        }
-                        val database = FirebaseDatabase.getInstance()
-                        val usersRef = database.getReference("users")
-
-                        val userMap = HashMap<String, Any>()
-                        userMap["uid"] = uid
-                        userMap["email"] = email
-                        userMap["firstName"] = firstName
-
-                        // Ajoutez l'URL de l'image à la carte si disponible
-                        if (imageUri != null) {
-                            val imageUrl =
-                                "https://firebasestorage.googleapis.com/v0/b/raluganplus.appspot.com/o/userProfile%2F${uid}.jpeg?alt=media"
-                            userMap["imageUrl"] = imageUrl
-                        } else {
-                            userMap["imageUrl"] = ""
-                        }
-
-                        usersRef.child(uid).setValue(userMap)
-                            .addOnCompleteListener { dbTask ->
-                                if (dbTask.isSuccessful) {
-                                    // Succès de l'enregistrement dans la base de données
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Inscription réussie",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                } else {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Erreur d'enregistrement dans la base de données",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                    } else {
-                        // L'inscription a échoué
-                        Toast.makeText(
-                            requireContext(),
-                            "Erreur d'inscription: ${task.exception?.localizedMessage}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-    }
-
-    // Fonction pour télécharger une image sur Firebase Storage
-    private fun uploadImageToFirebaseStorage(uid: String, imageUri: Uri) {
-        val storageRef = FirebaseStorage.getInstance().getReference("userProfile")
-        val imageRef = storageRef.child("image_${System.currentTimeMillis()}.jpeg")
-
-        imageRef.putFile(imageUri)
-            .addOnSuccessListener { taskSnapshot ->
-                // L'image a été téléchargée avec succès
-                // Récupérez l'URL de téléchargement
-                imageRef.downloadUrl.addOnSuccessListener { uri ->
-                    // Mettez à jour la base de données avec l'URL de l'image
-                    updateProfileImageInDatabase(uid, uri.toString())
-                }
-            }
-            .addOnFailureListener { exception ->
-                // Une erreur s'est produite lors du téléchargement de l'image
-                Toast.makeText(
-                    requireContext(),
-                    "Erreur de téléchargement de l'image: ${exception.localizedMessage}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-    }
-
-    private fun updateProfileImageInDatabase(uid: String, imageUrl: String) {
-        val database = FirebaseDatabase.getInstance()
-        val usersRef = database.getReference("users")
-
-        // Mettez à jour l'URL de l'image dans la base de données
-        usersRef.child(uid).child("imageUrl").setValue(imageUrl)
-            .addOnCompleteListener { dbTask ->
-                if (dbTask.isSuccessful) {
-                    // Succès de la mise à jour de l'image dans la base de données
-                    Toast.makeText(
-                        requireContext(),
-                        "Image de profil mise à jour avec succès",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Erreur de mise à jour de l'image de profil dans la base de données",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 
     // Assurez-vous de définir le code de demande IMAGE_PICK_CODE
     companion object {

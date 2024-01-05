@@ -113,6 +113,10 @@ class ProfileFragment : Fragment() {
                             } else {
                                 // Gérer le cas où l'URL de l'image est vide ou nulle
                                 Log.e("DEBUG", "Image URL is empty or null")
+                                Glide.with(requireContext())
+                                    .load(R.drawable.default_image)
+                                    .circleCrop()
+                                    .into(logoImageView)
                             }
                             // Affichez le prénom de l'utilisateur
                             userNameTextView.text = "$firstName"
