@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.request.target.Target
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -89,84 +91,66 @@ class SearchFragment : Fragment() {
     }
 
     private fun handleApiResponse(response: Response<ResponseBody>) {
-        Log.d("SearchFragment", "Handling API response")
-        val resultTextView = binding.textSearch
-        val imageView = binding.imageView
+        val linearLayout = binding.linearLayout
 
         if (response.isSuccessful) {
             try {
                 val jsonResult = JSONObject(response.body()?.string())
 
-                // Vérifiez si la clé "results" existe dans la réponse JSON
                 if (jsonResult.has("results")) {
                     val results = jsonResult.getJSONObject("results")
-
-                    // Obtenez la liste des "bindings"
                     val bindings = results.getJSONArray("bindings")
 
-                    // Vérifiez s'il y a au moins un résultat
                     if (bindings.length() > 0) {
-                        // Utilisez StringBuilder pour concaténer tous les titres
-                        val titlesBuilder = StringBuilder()
-
-                        // Traitez chaque élément dans la liste des "bindings"
                         for (i in 0 until bindings.length()) {
                             val binding = bindings.getJSONObject(i)
                             val itemLabel = binding.getJSONObject("itemLabel").getString("value")
-                            // Ajoutez le titre à la chaîne des titres
-                            titlesBuilder.append("$itemLabel\n")
 
-                            // Vérifiez si "pic" existe avant de charger l'image
+                            // Créer un TextView pour le titre
+                            val titleTextView = TextView(requireContext())
+                            titleTextView.text = itemLabel
+
+                            // Créer un ImageView pour l'image
                             if (binding.has("pic")) {
                                 val imageUrl = binding.getJSONObject("pic").getString("value").replace("http://", "https://")
-                                Log.d("SearchFragment", "Image URL: $imageUrl")  // Ajoutez cette ligne pour imprimer l'URL dans les logs
+                                val imageView = ImageView(requireContext())
 
-                                // Utilisez Glide pour charger l'image dans l'ImageView
+                                // Utiliser Glide pour charger l'image dans l'ImageView
                                 Glide.with(this)
                                     .load(imageUrl)
                                     .error(R.drawable.ic_launcher_foreground)
-                                    .listener(object : RequestListener<Drawable> {
-                                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                                            Log.e("SearchFragment", "Glide Load Failed", e)
-                                            return false
-                                        }
-
-                                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                                            Log.d("SearchFragment", "Image Loaded Successfully")
-                                            return false
-                                        }
-                                    })
                                     .into(imageView)
 
-
+                                // Ajouter le TextView et ImageView au LinearLayout
+                                linearLayout.addView(titleTextView)
+                                linearLayout.addView(imageView)
                             } else {
-                                // Si "pic" n'existe pas, vous pouvez gérer cela ici
-                                Log.d("SearchFragment", "Aucune URL d'image trouvée")
+                                // Si "pic" n'existe pas, ajouter seulement le TextView
+                                linearLayout.addView(titleTextView)
                             }
                         }
-
-                        // Affichez la liste des titres dans le TextView
-                        resultTextView.text = titlesBuilder.toString()
                     } else {
-                        // Aucun résultat trouvé
-                        resultTextView.text = "Aucun résultat trouvé"
+                        linearLayout.addView(createTextView("Aucun résultat trouvé"))
                     }
                 } else {
-                    // Gérer le cas où la clé "results" est absente dans la réponse JSON
-                    resultTextView.text = "Aucun résultat trouvé"
+                    linearLayout.addView(createTextView("Aucun résultat trouvé"))
                 }
             } catch (e: JSONException) {
+                linearLayout.addView(createTextView("Erreur de traitement JSON"))
                 Log.e("SearchFragment", "JSON parsing error: ${e.message}")
             }
         } else {
+            linearLayout.addView(createTextView("Erreur de chargement des données"))
             Log.e("SearchFragment", "API call failed with code: ${response.code()}")
             // ... (rest of the error handling)
         }
     }
 
-
-
-
+    private fun createTextView(text: String): TextView {
+        val textView = TextView(requireContext())
+        textView.text = text
+        return textView
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
