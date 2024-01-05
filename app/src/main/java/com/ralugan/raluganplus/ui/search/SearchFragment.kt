@@ -6,8 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.request.target.Target
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -47,8 +51,22 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Remplacez votre requête SPARQL actuelle avec la nouvelle requête
-        val sparqlQuery = """
+        val editTextSearch = view.findViewById<EditText>(R.id.editTextSearch)
+        val buttonSearch = view.findViewById<Button>(R.id.buttonSearch)
+
+        buttonSearch.setOnClickListener {
+            val query = editTextSearch.text.toString()
+            // Appel de la fonction de recherche avec la nouvelle valeur de query
+            performSearch(query)
+        }
+    }
+
+    private fun performSearch(query: String?) {
+        // Vous pouvez utiliser la nouvelle valeur de query pour construire votre requête SPARQL
+        // et appeler l'API avec la nouvelle requête
+        if (query != null) {
+            // Remplacez votre requête SPARQL actuelle avec la nouvelle requête
+            val sparqlQuery = """
     SELECT ?itemLabel ?pic
     WHERE {
         {
@@ -56,7 +74,7 @@ class SearchFragment : Fragment() {
             ?seriesItem wdt:P31 wd:Q5398426.  # Television series
             ?seriesItem wdt:P750 wd:Q54958752.  # Platform = Disney+
 
-            FILTER(CONTAINS(UCASE(?itemLabel), UCASE('Star')))
+            FILTER(CONTAINS(UCASE(?itemLabel), UCASE('$query')))
             OPTIONAL {
                 ?seriesItem wdt:P154 ?pic.
             }
@@ -67,7 +85,7 @@ class SearchFragment : Fragment() {
             ?filmItem wdt:P31 wd:Q11424.  # Film
             ?filmItem wdt:P750 wd:Q54958752.  # Platform = Disney+
 
-            FILTER(CONTAINS(UCASE(?itemLabel), UCASE('Star')))
+            FILTER(CONTAINS(UCASE(?itemLabel), UCASE('$query')))
             OPTIONAL {
                 ?filmItem wdt:P154 ?pic.
             }
@@ -76,19 +94,23 @@ class SearchFragment : Fragment() {
     ORDER BY DESC (?pic)
 """.trimIndent()
 
-        // Appel de l'API dans une coroutine
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = wikidataApi.getDisneyPlusInfo(sparqlQuery, "json").execute()
+            // Appel de l'API dans une coroutine
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val response = wikidataApi.getDisneyPlusInfo(sparqlQuery, "json").execute()
 
-                activity?.runOnUiThread {
-                    handleApiResponse(response)
+                    activity?.runOnUiThread {
+                        handleApiResponse(response)
+                    }
+                } catch (e: Exception) {
+                    // Gérer l'exception
                 }
-            } catch (e: Exception) {
-                // Gérer l'exception
             }
         }
-    }
+            // Exécutez la recherche avec la valeur de query
+            // ...
+            Log.d("SearchFragment", "Search query: $query")
+        }
 
     private fun handleApiResponse(response: Response<ResponseBody>) {
         val linearLayout = binding.linearLayout
