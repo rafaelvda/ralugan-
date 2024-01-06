@@ -51,14 +51,21 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val editTextSearch = view.findViewById<EditText>(R.id.editTextSearch)
-        val buttonSearch = view.findViewById<Button>(R.id.buttonSearch)
+        val searchView: SearchView = view.findViewById(R.id.searchView)
 
-        buttonSearch.setOnClickListener {
-            val query = editTextSearch.text.toString()
-            // Appel de la fonction de recherche avec la nouvelle valeur de query
-            performSearch(query)
-        }
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Appel de la méthode de recherche ici
+                performSearch(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Mettez à jour votre liste ou effectuez d'autres actions lorsqu'il y a un changement de texte
+                return true
+            }
+        })
+
     }
 
     private fun performSearch(query: String?) {
@@ -67,32 +74,32 @@ class SearchFragment : Fragment() {
         if (query != null) {
             // Remplacez votre requête SPARQL actuelle avec la nouvelle requête
             val sparqlQuery = """
-    SELECT ?itemLabel ?pic
-    WHERE {
-        {
-            ?seriesItem wdt:P1476 ?itemLabel. # Title
-            ?seriesItem wdt:P31 wd:Q5398426.  # Television series
-            ?seriesItem wdt:P750 wd:Q54958752.  # Platform = Disney+
-
-            FILTER(CONTAINS(UCASE(?itemLabel), UCASE('$query')))
-            OPTIONAL {
-                ?seriesItem wdt:P154 ?pic.
-            }
-        }
-        UNION
-        {
-            ?filmItem wdt:P1476 ?itemLabel. # Title
-            ?filmItem wdt:P31 wd:Q11424.  # Film
-            ?filmItem wdt:P750 wd:Q54958752.  # Platform = Disney+
-
-            FILTER(CONTAINS(UCASE(?itemLabel), UCASE('$query')))
-            OPTIONAL {
-                ?filmItem wdt:P154 ?pic.
-            }
-        }
-    }
-    ORDER BY DESC (?pic)
-""".trimIndent()
+                SELECT ?itemLabel ?pic
+                WHERE {
+                    {
+                        ?seriesItem wdt:P1476 ?itemLabel. # Title
+                        ?seriesItem wdt:P31 wd:Q5398426.  # Television series
+                        ?seriesItem wdt:P750 wd:Q54958752.  # Platform = Disney+
+            
+                        FILTER(CONTAINS(UCASE(?itemLabel), UCASE('$query')))
+                        OPTIONAL {
+                            ?seriesItem wdt:P154 ?pic.
+                        }
+                    }
+                    UNION
+                    {
+                        ?filmItem wdt:P1476 ?itemLabel. # Title
+                        ?filmItem wdt:P31 wd:Q11424.  # Film
+                        ?filmItem wdt:P750 wd:Q54958752.  # Platform = Disney+
+            
+                        FILTER(CONTAINS(UCASE(?itemLabel), UCASE('$query')))
+                        OPTIONAL {
+                            ?filmItem wdt:P154 ?pic.
+                        }
+                    }
+                }
+                ORDER BY DESC (?pic)
+            """.trimIndent()
 
             // Appel de l'API dans une coroutine
             CoroutineScope(Dispatchers.IO).launch {
@@ -114,6 +121,9 @@ class SearchFragment : Fragment() {
 
     private fun handleApiResponse(response: Response<ResponseBody>) {
         val linearLayout = binding.linearLayout
+
+        // Effacer les résultats précédents
+        linearLayout.removeAllViews()
 
         if (response.isSuccessful) {
             try {
