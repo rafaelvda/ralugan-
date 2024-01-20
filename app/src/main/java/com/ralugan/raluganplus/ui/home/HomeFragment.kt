@@ -28,17 +28,17 @@ class HomeFragment : Fragment() {
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
         // Obtenez la référence de l'ImageButton
-        val customButton = findViewById<ImageButton>(R.id.customButton)
+        //val customButton = findViewById<ImageButton>(R.id.customButtonMarvel)
 
         // Ajoutez un écouteur de clic au bouton si nécessaire
-        customButton.setOnClickListener {
+        //customButton.setOnClickListener {
             // Logique à exécuter lors du clic sur le bouton
-        }
+        //}
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
+        val textView: TextView = binding.textViewNews
         homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
