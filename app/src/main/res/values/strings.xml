@@ -7,4 +7,7 @@
     <string name="title_login">Connexion</string>
     <string name="title_signup">S\'inscrire</string>
     <string name="title_editprofile">Modifier le profil</string>
+    <string name="title_disney">Disney</string>
+    <string name="title_marvel">Marvel</string>
+    <string name="title_starwars">Star Wars</string>
 </resources>

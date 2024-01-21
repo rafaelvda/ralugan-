@@ -47,5 +47,23 @@
         android:label="@string/title_editprofile"
         tools:layout="@layout/fragment_editprofile" />
 
+    <fragment
+        android:id="@+id/navigation_disney"
+        android:name="com.ralugan.raluganplus.ui.home.DisneyFragment"
+        android:label="@string/title_disney"
+        tools:layout="@layout/fragment_disney"/>
+
+    <fragment
+        android:id="@+id/navigation_marvel"
+        android:name="com.ralugan.raluganplus.ui.home.MarvelFragment"
+        android:label="@string/title_marvel"
+        tools:layout="@layout/fragment_marvel"/>
+
+    <fragment
+        android:id="@+id/navigation_starwars"
+        android:name="com.ralugan.raluganplus.ui.home.StarWarsFragment"
+        android:label="@string/title_starwars"
+        tools:layout="@layout/fragment_starwars"/>
+
 
 </navigation>
