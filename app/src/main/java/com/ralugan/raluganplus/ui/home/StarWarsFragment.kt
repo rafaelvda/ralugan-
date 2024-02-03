@@ -1,5 +1,6 @@
 package com.ralugan.raluganplus.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.ralugan.raluganplus.DetailsActivity
 import com.ralugan.raluganplus.R
 import com.ralugan.raluganplus.api.ApiClient
 import com.ralugan.raluganplus.api.WikidataApi
@@ -80,6 +82,16 @@ class StarWarsFragment : Fragment() {
                 // Gérer l'exception
             }
         }
+        binding.textSearch.setOnClickListener {
+            val clickedTitle = binding.textSearch.text.toString()
+
+            // Create an Intent to start the new activity
+            val intent = Intent(requireContext(), DetailsActivity::class.java)
+            intent.putExtra("TITLE", clickedTitle)
+
+            // Start the activity
+            startActivity(intent)
+        }
     }
 
     private fun handleApiResponse(response: Response<ResponseBody>) {
@@ -105,10 +117,11 @@ class StarWarsFragment : Fragment() {
                             val titleTextView = TextView(requireContext())
                             titleTextView.text = itemLabel
 
+                            val imageView = ImageView(requireContext())
+
                             // Créer un ImageView pour l'image
                             if (binding.has("pic")) {
                                 val imageUrl = binding.getJSONObject("pic").getString("value").replace("http://", "https://")
-                                val imageView = ImageView(requireContext())
 
                                 // Utiliser Glide pour charger l'image dans l'ImageView
                                 Glide.with(this)
@@ -120,8 +133,37 @@ class StarWarsFragment : Fragment() {
                                 linearLayout.addView(titleTextView)
                                 linearLayout.addView(imageView)
                             } else {
-                                // Si "pic" n'existe pas, ajouter seulement le TextView
+                                Glide.with(this)
+                                    .load(R.drawable.ic_launcher_foreground)
+                                    .into(imageView)
                                 linearLayout.addView(titleTextView)
+                                linearLayout.addView(imageView)
+                            }
+
+                            // Set an ID for the TextView to capture click event
+                            titleTextView.id = View.generateViewId()
+
+                            // Set click listener for the TextView
+                            titleTextView.setOnClickListener {
+                                val clickedTitle = titleTextView.text.toString()
+
+                                // Create an Intent to start the new activity
+                                val intent = Intent(requireContext(), DetailsActivity::class.java)
+                                intent.putExtra("TITLE", clickedTitle)
+
+                                // Start the activity
+                                startActivity(intent)
+                            }
+
+                            imageView.setOnClickListener {
+                                val clickedTitle = titleTextView.text.toString()
+
+                                // Create an Intent to start the new activity
+                                val intent = Intent(requireContext(), DetailsActivity::class.java)
+                                intent.putExtra("TITLE", clickedTitle)
+
+                                // Start the activity
+                                startActivity(intent)
                             }
                         }
                     } else {
@@ -144,6 +186,9 @@ class StarWarsFragment : Fragment() {
     private fun createTextView(text: String): TextView {
         val textView = TextView(requireContext())
         textView.text = text
+        textView.isClickable = true
+        textView.isFocusable = true
+
         return textView
     }
 
