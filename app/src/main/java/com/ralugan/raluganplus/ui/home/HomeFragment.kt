@@ -1,20 +1,17 @@
 package com.ralugan.raluganplus.ui.home
 
 import android.app.AlertDialog
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.ralugan.raluganplus.R
 import com.ralugan.raluganplus.api.ApiClient
 import com.ralugan.raluganplus.api.WikidataApi
@@ -26,10 +23,14 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.ralugan.raluganplus.ui.details.DetailsActivity
+import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
+import androidx.viewpager2.widget.ViewPager2
 
-class HomeFragment : Fragment() {
+
+class HomeFragment<YourResponseType : Any?> : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -39,30 +40,26 @@ class HomeFragment : Fragment() {
 
     private val wikidataApi: WikidataApi = ApiClient.getWikidataApi()
 
+    private lateinit var horizontalLinearLayout: LinearLayout
+    private lateinit var horizontalLinearLayout2: LinearLayout
+    private lateinit var horizontalLinearLayout3: LinearLayout
+
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+    ): View? {
+        val rootView = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // Obtenez la référence de l'ImageButton
-        //val customButton = findViewById<ImageButton>(R.id.customButtonMarvel)
+        horizontalLinearLayout = rootView.findViewById(R.id.horizontalLinearLayout)
+        horizontalLinearLayout2 = rootView.findViewById(R.id.horizontalLinearLayout2)
+        horizontalLinearLayout3 = rootView.findViewById(R.id.horizontalLinearLayout3)
 
-        // Ajoutez un écouteur de clic au bouton si nécessaire
-        //customButton.setOnClickListener {
-            // Logique à exécuter lors du clic sur le bouton
-        //}
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textViewNews
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        nouveauSurRaluganPlus()
+        Drama()
+        Crime()
+        return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,42 +90,103 @@ class HomeFragment : Fragment() {
         starplusButton.setOnClickListener {
             showUnderConstructionDialog()
         }
-        //movies()
+        nouveauSurRaluganPlus()
     }
 
-    private fun movies() {
-        // Vous pouvez utiliser la nouvelle valeur de query pour construire votre requête SPARQL
-        // et appeler l'API avec la nouvelle requête
-            // Remplacez votre requête SPARQL actuelle avec la nouvelle requête
-            val sparqlQuery = """
-            SELECT ?itemLabel ?pic
-            WHERE {
+    private fun nouveauSurRaluganPlus() {
+        val sparqlQuery = """
+        SELECT ?itemLabel ?pic ?date
+        WHERE {
             ?item wdt:P1476 ?itemLabel. # Title
-            ?item wdt:P31 wd:Q11424.  # Film
+            ?item wdt:P580 ?date.
+            #?item wdt:P31 wd:Q11424.  # Film
+            ?item wdt:P31 wd:Q5398426.  # Television series
             ?item wdt:P750 wd:Q54958752.  # Platform = Disney+
-                OPTIONAL{
+            OPTIONAL{
                 ?item wdt:P154 ?pic.
             }
-            }
-            ORDER BY DESC (?pic)
-            """.trimIndent()
+        }
+        ORDER BY DESC(BOUND(?pic)) DESC(?date)
+        LIMIT 14
+    """.trimIndent()
 
-            // Appel de l'API dans une coroutine
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val response = wikidataApi.getDisneyPlusInfo(sparqlQuery, "json").execute()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = wikidataApi.getDisneyPlusInfo(sparqlQuery, "json").execute()
 
-                    activity?.runOnUiThread {
-                        handleApiResponse(response)
-                    }
-                } catch (e: Exception) {
-                    // Gérer l'exception
+                withContext(Dispatchers.Main) {
+                    handleApiResponse(response,  horizontalLinearLayout)
                 }
+            } catch (e: Exception) {
+                // Gérer l'exception
             }
         }
+    }
 
-    private fun handleApiResponse(response: Response<ResponseBody>) {
-        val horizontalScrollView1 = view?.findViewById<HorizontalScrollView>(R.id.horizontalScrollView1)
+    private fun Drama() {
+        val sparqlQuery = """
+        SELECT ?itemLabel ?pic
+        WHERE {
+            ?item wdt:P1476 ?itemLabel. # Title
+            ?item wdt:P136 wd:Q1366112. # GenreDrama
+            #?item wdt:P31 wd:Q11424.  # Film
+            ?item wdt:P31 wd:Q5398426.  # Television series
+            ?item wdt:P750 wd:Q54958752.  # Platform = Disney+
+            OPTIONAL{
+                ?item wdt:P154 ?pic.
+            }
+        }
+        ORDER BY DESC (?pic)
+        LIMIT 15
+    """.trimIndent()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = wikidataApi.getDisneyPlusInfo(sparqlQuery, "json").execute()
+
+                withContext(Dispatchers.Main) {
+                    handleApiResponse(response,  horizontalLinearLayout2)
+                }
+            } catch (e: Exception) {
+                // Gérer l'exception
+            }
+        }
+    }
+
+    private fun Crime() {
+        val sparqlQuery = """
+        SELECT ?itemLabel ?pic
+        WHERE {
+            ?item wdt:P1476 ?itemLabel. # Title
+            ?item wdt:P136 wd:Q9335577. # GenreDrama
+            #?item wdt:P31 wd:Q11424.  # Film
+            ?item wdt:P31 wd:Q5398426.  # Television series
+            ?item wdt:P750 wd:Q54958752.  # Platform = Disney+
+            OPTIONAL{
+                ?item wdt:P154 ?pic.
+            }
+        }
+        ORDER BY DESC (?pic)
+        LIMIT 30
+    """.trimIndent()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = wikidataApi.getDisneyPlusInfo(sparqlQuery, "json").execute()
+
+                withContext(Dispatchers.Main) {
+                    handleApiResponse(response,  horizontalLinearLayout3)
+                }
+            } catch (e: Exception) {
+                // Gérer l'exception
+            }
+        }
+    }
+
+
+    private fun handleApiResponse(response: Response<ResponseBody>, horizontalLinearLayout: LinearLayout) {
+        // Effacer les résultats précédents
+        horizontalLinearLayout.removeAllViews()
 
         if (response.isSuccessful) {
             try {
@@ -143,62 +201,83 @@ class HomeFragment : Fragment() {
                             val binding = bindings.getJSONObject(i)
                             val itemLabel = binding.getJSONObject("itemLabel").getString("value")
 
-                            // Créer un CardView pour chaque résultat
-                            val cardView = CardView(requireContext())
-                            cardView.layoutParams = ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT
-                            )
-                            cardView.radius = context?.let { 8f.dpToPx(it).toFloat() }!!
-                            cardView.cardElevation = context?.let { 8f.dpToPx(it).toFloat() }!!
-
-                            // Créer un LinearLayout à l'intérieur du CardView
-                            val linearLayout = LinearLayout(requireContext())
-                            linearLayout.orientation = LinearLayout.VERTICAL
-                            linearLayout.layoutParams = ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.MATCH_PARENT
-                            )
-
                             // Créer un TextView pour le titre
                             val titleTextView = TextView(requireContext())
                             titleTextView.text = itemLabel
 
-                            // Ajouter le TextView au LinearLayout
-                            linearLayout.addView(titleTextView)
+                            val imageView = ImageView(requireContext())
 
                             // Créer un ImageView pour l'image
                             if (binding.has("pic")) {
                                 val imageUrl = binding.getJSONObject("pic").getString("value").replace("http://", "https://")
-                                val imageView = ImageView(requireContext())
 
                                 // Utiliser Glide pour charger l'image dans l'ImageView
-                                Glide.with(this)
+                                Glide.with(requireContext())
                                     .load(imageUrl)
-                                    .error(R.drawable.ic_launcher_foreground)
+                                    .override(500, 500) // Remplacez 300 par la taille souhaitée en pixels
                                     .into(imageView)
 
-                                // Ajouter l'ImageView au LinearLayout
-                                linearLayout.addView(imageView)
+                                val params = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                                )
+                                params.rightMargin = 10 // Ajustez cette valeur en fonction de l'espace souhaité
+
+                                // Ajouter le TextView et ImageView à la disposition horizontale avec les marges
+                                horizontalLinearLayout.addView(imageView, params)
                             }
 
-                            // Ajouter le LinearLayout au CardView
-                            cardView.addView(linearLayout)
+                            // Set an ID for the TextView to capture click event
+                            titleTextView.id = View.generateViewId()
 
-                            // Ajouter le CardView à votre HorizontalScrollView
-                            if (horizontalScrollView1 != null) {
-                                horizontalScrollView1.addView(cardView)
+                            // Set click listener for the TextView
+                            titleTextView.setOnClickListener {
+                                val clickedTitle = titleTextView.text.toString()
+
+                                // Create an Intent to start the new activity
+                                val intent = Intent(requireContext(), DetailsActivity::class.java)
+                                intent.putExtra("TITLE", clickedTitle)
+
+                                // Start the activity
+                                startActivity(intent)
+                            }
+
+                            imageView.setOnClickListener {
+                                val clickedTitle = titleTextView.text.toString()
+
+                                // Create an Intent to start the new activity
+                                val intent = Intent(requireContext(), DetailsActivity::class.java)
+                                intent.putExtra("TITLE", clickedTitle)
+
+                                // Start the activity
+                                startActivity(intent)
                             }
                         }
+                    } else {
+                        horizontalLinearLayout.addView(createTextView("Aucun résultat trouvé"))
                     }
+                } else {
+                    horizontalLinearLayout.addView(createTextView("Aucun résultat trouvé"))
                 }
             } catch (e: JSONException) {
+                horizontalLinearLayout.addView(createTextView("Erreur de traitement JSON"))
                 Log.e("SearchFragment", "JSON parsing error: ${e.message}")
             }
         } else {
+            horizontalLinearLayout.addView(createTextView("Erreur de chargement des données"))
             Log.e("SearchFragment", "API call failed with code: ${response.code()}")
             // ... (rest of the error handling)
         }
+    }
+
+    private fun createTextView(text: String): TextView {
+        val textView = TextView(requireContext())
+        textView.text = text
+
+        textView.isClickable = true
+        textView.isFocusable = true
+
+        return textView
     }
 
     private fun showUnderConstructionDialog() {
@@ -213,10 +292,6 @@ class HomeFragment : Fragment() {
         // Affichez la boîte de dialogue
         val dialog = builder.create()
         dialog.show()
-    }
-    fun Float.dpToPx(context: Context): Int {
-        val density = context.resources.displayMetrics.density
-        return (this * density).toInt()
     }
 
 

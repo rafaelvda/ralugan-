@@ -41,6 +41,18 @@
                 android:orientation="vertical" />
         </ScrollView>
 
+        <ImageView
+            android:id="@+id/imageVie"
+            android:layout_width="360dp"
+            android:layout_height="133dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/cardViewPixar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            android:src="@drawable/slide1" />
+
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewStar"
             android:layout_width="112dp"
@@ -211,6 +223,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewNews">
 
             <LinearLayout
+                android:id="@+id/horizontalLinearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -264,7 +277,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Action et aventure"
+            android:text="Crimes"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.053"
@@ -281,6 +294,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewAction">
 
             <LinearLayout
+                android:id="@+id/horizontalLinearLayout2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -336,7 +350,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Romance"
+            android:text="Drama"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.045"
@@ -353,6 +367,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewRomance">
 
             <LinearLayout
+                android:id="@+id/horizontalLinearLayout3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
