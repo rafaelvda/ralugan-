@@ -139,7 +139,7 @@ class StarWarsFragment : Fragment() {
                                 // Utiliser Glide pour charger l'image dans l'ImageView
                                 Glide.with(this)
                                     .load(imageUrl)
-                                    .error(R.drawable.ic_launcher_foreground)
+                                    .error(R.drawable.ralugan)
                                     .into(imageView)
 
                                 // Ajouter le TextView et ImageView au LinearLayout
@@ -155,7 +155,7 @@ class StarWarsFragment : Fragment() {
                                 linearLayout.addView(heartButton)
                             } else {
                                 Glide.with(this)
-                                    .load(R.drawable.ic_launcher_foreground)
+                                    .load(R.drawable.ralugan)
                                     .into(imageView)
                                 linearLayout.addView(titleTextView)
                                 linearLayout.addView(imageView)

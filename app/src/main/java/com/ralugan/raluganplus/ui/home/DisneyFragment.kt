@@ -140,7 +140,7 @@ class DisneyFragment : Fragment() {
                                 // Utiliser Glide pour charger l'image dans l'ImageView
                                 Glide.with(this)
                                     .load(imageUrl)
-                                    .error(R.drawable.ic_launcher_background)
+                                    .error(R.drawable.ralugan)
                                     .into(imageView)
 
                                 // Ajouter le TextView et ImageView au LinearLayout
@@ -158,7 +158,7 @@ class DisneyFragment : Fragment() {
                             } else {
                                 // Si "pic" n'existe pas, ajouter seulement le TextView
                                 Glide.with(this)
-                                    .load(R.drawable.ic_launcher_foreground)
+                                    .load(R.drawable.ralugan)
                                     .into(imageView)
                                 linearLayout.addView(titleTextView)
                                 linearLayout.addView(imageView)
