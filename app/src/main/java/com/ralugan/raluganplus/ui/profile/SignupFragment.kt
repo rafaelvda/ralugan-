@@ -99,11 +99,13 @@ class SignupFragment : Fragment() {
                         }
                         val database = FirebaseDatabase.getInstance()
                         val usersRef = database.getReference("users")
+                        val listFavorite = mutableListOf("Your initial favorite movie" )
 
                         val userMap = HashMap<String, Any>()
                         userMap["uid"] = uid
                         userMap["email"] = email
                         userMap["firstName"] = firstName
+                        userMap ["listFavorite"] = listFavorite
 
                         // Ajoutez l'URL de l'image à la carte si disponible
                         if (imageUri != null) {
@@ -113,6 +115,8 @@ class SignupFragment : Fragment() {
                         } else {
                             userMap["imageUrl"] = ""
                         }
+
+
 
                         usersRef.child(uid).setValue(userMap)
                             .addOnCompleteListener { dbTask ->

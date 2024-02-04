@@ -65,5 +65,11 @@
         android:label="@string/title_starwars"
         tools:layout="@layout/fragment_starwars"/>
 
+    <fragment
+        android:id="@+id/navigation_favorite"
+        android:name="com.ralugan.raluganplus.ui.favorite.FavoriteFragment"
+        android:label="@string/title_favorite"
+        tools:layout="@layout/fragment_favorite"/>
+
 
 </navigation>
