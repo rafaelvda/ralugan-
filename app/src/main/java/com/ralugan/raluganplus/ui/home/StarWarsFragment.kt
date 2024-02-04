@@ -5,27 +5,38 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.ralugan.raluganplus.R
 import com.ralugan.raluganplus.api.ApiClient
 import com.ralugan.raluganplus.api.WikidataApi
 import com.ralugan.raluganplus.databinding.FragmentStarwarsBinding
+import com.ralugan.raluganplus.dataclass.RaluganPlus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
+import kotlin.math.log
 
 class StarWarsFragment : Fragment() {
 
     private var _binding: FragmentStarwarsBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var auth: FirebaseAuth
     private val wikidataApi: WikidataApi = ApiClient.getWikidataApi()
 
     override fun onCreateView(
@@ -38,6 +49,7 @@ class StarWarsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        auth = FirebaseAuth.getInstance()
         super.onViewCreated(view, savedInstanceState)
 
         val sparqlQuery = """
@@ -119,6 +131,19 @@ class StarWarsFragment : Fragment() {
                                 // Ajouter le TextView et ImageView au LinearLayout
                                 linearLayout.addView(titleTextView)
                                 linearLayout.addView(imageView)
+
+                                // Ajouter un cœur cliquable
+                                val heartButton = ImageButton(requireContext())
+                                heartButton.setImageResource(R.drawable.ic_coeur)
+
+                                val sizeInPixels = resources.getDimensionPixelSize(R.dimen.heart_size)
+                                heartButton.layoutParams = ViewGroup.LayoutParams(sizeInPixels, sizeInPixels)
+
+                                heartButton.setOnClickListener {
+                                    // Ajouter le film à la liste des favoris de l'utilisateur
+                                    addMovieToFavorites(auth.currentUser?.uid, itemLabel, imageUrl)
+                                }
+                                linearLayout.addView(heartButton)
                             } else {
                                 // Si "pic" n'existe pas, ajouter seulement le TextView
                                 linearLayout.addView(titleTextView)
@@ -151,4 +176,65 @@ class StarWarsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun addMovieToFavorites(uid: String?, movieTitle: String, movieImageUrl: String) {
+        if (uid != null) {
+            // Vérifier si le film est déjà dans la liste des favoris
+            isMovieInFavorites(uid, movieTitle) { isAlreadyInFavorites ->
+                if (isAlreadyInFavorites) {
+                    Log.d("star wars", "$isAlreadyInFavorites")
+                    // Afficher un message indiquant que le film est déjà dans les favoris
+                    Toast.makeText(
+                        requireContext(),
+                        "Le film est déjà dans la liste des favoris",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    // Ajouter le film à la liste des favoris
+                    val database = FirebaseDatabase.getInstance()
+                    val usersRef = database.getReference("users").child(uid).child("listFavorite")
+
+                    val newFavorite = RaluganPlus(movieTitle, movieImageUrl)
+                    usersRef.push().setValue(newFavorite)
+                        .addOnCompleteListener { dbTask ->
+                            if (dbTask.isSuccessful) {
+                                // Succès de l'ajout du film aux favoris
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Film ajouté aux favoris avec succès",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Erreur lors de l'ajout du film aux favoris",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                }
+            }
+        }
+    }
+    private fun isMovieInFavorites(uid: String?, movieTitle: String, onComplete: (Boolean) -> Unit) {
+        if (uid != null) {
+            val database = FirebaseDatabase.getInstance()
+            val usersRef = database.getReference("users").child(uid).child("listFavorite")
+
+            usersRef.orderByChild("title").equalTo(movieTitle)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        onComplete(dataSnapshot.exists())
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        // Gérer l'erreur
+                        onComplete(false)
+                    }
+                })
+        } else {
+            onComplete(false)
+        }
+    }
+
 }

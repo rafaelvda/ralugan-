@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.ralugan.raluganplus.R
+import com.ralugan.raluganplus.ui.favorite.FavoriteFragment
 import java.lang.Exception
 
 class ProfileFragment : Fragment() {
@@ -48,6 +49,7 @@ class ProfileFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
+
         val editProfileButton: Button = view.findViewById(R.id.editProfileButton)
         val watchListButton: Button = view.findViewById(R.id.watchListButton)
         val settingsButton: Button = view.findViewById(R.id.settingsButton)
@@ -67,7 +69,7 @@ class ProfileFragment : Fragment() {
             }
 
             watchListButton.setOnClickListener {
-                showUnderConstructionDialog()
+                findNavController().navigate(R.id.navigation_favorite)
             }
 
             settingsButton.setOnClickListener {
