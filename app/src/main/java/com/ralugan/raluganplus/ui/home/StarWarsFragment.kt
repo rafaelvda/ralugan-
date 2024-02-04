@@ -12,11 +12,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+
 import com.ralugan.raluganplus.ui.details.DetailsActivity
 import com.ralugan.raluganplus.R
 import com.ralugan.raluganplus.api.ApiClient
