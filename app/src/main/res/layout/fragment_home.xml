@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#283240"
@@ -9,391 +9,397 @@
     tools:layout_editor_absoluteX="-130dp"
     tools:layout_editor_absoluteY="1dp">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="80dp"
-        android:layout_height="46dp"
-        android:src="@drawable/disney"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ScrollView
-        android:id="@+id/scrollViewSlider"
-        android:layout_width="360dp"
-        android:layout_height="133dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardViewPixar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.0">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewStar"
-        android:layout_width="112dp"
-        android:layout_height="55dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="22dp"
-        app:cardBackgroundColor="#525260"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewMarvel">
-
-        <ImageButton
-            android:id="@+id/customButtonStar"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="Button Image"
-            android:padding="16dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/star" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewDisney"
-        android:layout_width="112dp"
-        android:layout_height="55dp"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="16dp"
-        app:cardBackgroundColor="#525260"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollViewSlider">
-
-        <ImageButton
-            android:id="@+id/customButtonDisney"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="Button Image"
-            android:padding="16dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/disney" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewMarvel"
-        android:layout_width="112dp"
-        android:layout_height="55dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="22dp"
-        app:cardBackgroundColor="#525260"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollViewSlider">
-
-        <ImageButton
-            android:id="@+id/customButtonMarvel"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="Button Image"
-            android:padding="16dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/marvel" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewPixar"
-        android:layout_width="112dp"
-        android:layout_height="55dp"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        app:cardBackgroundColor="#525260"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardViewNatGeo"
-        app:layout_constraintEnd_toStartOf="@+id/cardViewMarvel"
-
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/cardViewDisney">
-
-        <ImageButton
-            android:id="@+id/customButton2"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="Button Image"
-            android:padding="16dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/pixar" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewNatGeo"
-        android:layout_width="112dp"
-        android:layout_height="55dp"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#525260"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewNews"
-        app:layout_constraintEnd_toStartOf="@+id/cardViewStar"
-        app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toEndOf="@+id/cardViewStarWars">
-
-        <ImageButton
-            android:id="@+id/customButton7"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="Button Image"
-            android:padding="16dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/natgeo" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewStarWars"
-        android:layout_width="112dp"
-        android:layout_height="55dp"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="8dp"
-        app:cardBackgroundColor="#525260"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewMarvel">
-
-        <ImageButton
-            android:id="@+id/customButton4"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="Button Image"
-            android:padding="16dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/starwars" />
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/textViewNews"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Nouveau sur Ralugan +"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.059"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewStarWars" />
-
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView1"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNews">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="80dp"
+            android:layout_height="46dp"
+            android:src="@drawable/disney"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/scrollViewSlider"
+            android:layout_width="360dp"
+            android:layout_height="133dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/cardViewPixar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.0">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewStar"
+            android:layout_width="112dp"
+            android:layout_height="55dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="22dp"
+            app:cardBackgroundColor="#525260"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewMarvel">
+
+            <ImageButton
+                android:id="@+id/customButtonStar"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="Button Image"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/star" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewDisney"
+            android:layout_width="112dp"
+            android:layout_height="55dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#525260"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollViewSlider">
+
+            <ImageButton
+                android:id="@+id/customButtonDisney"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="Button Image"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/disney" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewMarvel"
+            android:layout_width="112dp"
+            android:layout_height="55dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="22dp"
+            app:cardBackgroundColor="#525260"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollViewSlider">
+
+            <ImageButton
+                android:id="@+id/customButtonMarvel"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="Button Image"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/marvel" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewPixar"
+            android:layout_width="112dp"
+            android:layout_height="55dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="#525260"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/cardViewNatGeo"
+            app:layout_constraintEnd_toStartOf="@+id/cardViewMarvel"
+
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/cardViewDisney">
+
+            <ImageButton
+                android:id="@+id/customButton2"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="Button Image"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/pixar" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewNatGeo"
+            android:layout_width="112dp"
+            android:layout_height="55dp"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#525260"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/textViewNews"
+            app:layout_constraintEnd_toStartOf="@+id/cardViewStar"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toEndOf="@+id/cardViewStarWars">
+
+            <ImageButton
+                android:id="@+id/customButton7"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="Button Image"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/natgeo" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewStarWars"
+            android:layout_width="112dp"
+            android:layout_height="55dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="#525260"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewMarvel">
+
+            <ImageButton
+                android:id="@+id/customButton4"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="Button Image"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/starwars" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/textViewNews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="16dp"
+            android:text="Nouveau sur Ralugan +"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.059"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewStarWars" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView1_1"
-                android:layout_width="170dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp">
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewNews">
 
-                <ImageView
-                    android:id="@+id/imageView1_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/slide2" />
-            </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView1_2"
-                android:layout_width="170dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="12dp">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView1_1"
+                    android:layout_width="170dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="12dp">
 
-                <ImageView
-                    android:id="@+id/imageView1_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/slide1" />
-            </androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:id="@+id/imageView1_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/slide2" />
+                </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView1_3"
-                android:layout_width="170dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView1_2"
+                    android:layout_width="170dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="12dp">
 
-                <ImageView
-                    android:id="@+id/imageView1_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/slide2" />
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </HorizontalScrollView>
+                    <ImageView
+                        android:id="@+id/imageView1_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/slide1" />
+                </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/textViewAction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Action et aventure"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.053"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView1"/>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView1_3"
+                    android:layout_width="170dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="12dp">
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAction">
+                    <ImageView
+                        android:id="@+id/imageView1_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/slide2" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </HorizontalScrollView>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textViewAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="16dp"
+            android:text="Action et aventure"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.053"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView1"/>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView2"
-                android:layout_width="170dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent">
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewAction">
 
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/slide4" />
-            </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="170dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toEndOf="@+id/cardView2">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView2"
+                    android:layout_width="170dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent">
 
-                <ImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/slide3" />
-            </androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/slide4" />
+                </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView10"
-                android:layout_width="170dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="170dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toEndOf="@+id/cardView2">
 
-                <ImageView
-                    android:id="@+id/imageView10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/slide4" />
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </HorizontalScrollView>
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/slide3" />
+                </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/textViewRomance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Romance"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2" />
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView10"
+                    android:layout_width="170dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent">
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRomance">
+                    <ImageView
+                        android:id="@+id/imageView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/slide4" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </HorizontalScrollView>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textViewRomance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="16dp"
+            android:text="Romance"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.045"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView1_4"
-                android:layout_width="170dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp">
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewRomance">
 
-                <ImageView
-                    android:id="@+id/imageView1_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/slide2" />
-            </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView1_5"
-                android:layout_width="170dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="12dp">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView1_4"
+                    android:layout_width="170dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="12dp">
 
-                <ImageView
-                    android:id="@+id/imageView1_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/slide1" />
-            </androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:id="@+id/imageView1_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/slide2" />
+                </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView1_6"
-                android:layout_width="170dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView1_5"
+                    android:layout_width="170dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="12dp">
 
-                <ImageView
-                    android:id="@+id/imageView1_7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/slide2" />
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </HorizontalScrollView>
+                    <ImageView
+                        android:id="@+id/imageView1_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/slide1" />
+                </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView1_6"
+                    android:layout_width="170dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="12dp">
+
+                    <ImageView
+                        android:id="@+id/imageView1_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/slide2" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
