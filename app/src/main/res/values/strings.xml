@@ -10,4 +10,6 @@
     <string name="title_disney">Disney</string>
     <string name="title_marvel">Marvel</string>
     <string name="title_starwars">Star Wars</string>
+    <string name="title_favorite">Favoris</string>
+
 </resources>
