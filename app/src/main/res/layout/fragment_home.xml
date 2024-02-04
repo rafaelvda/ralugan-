@@ -210,7 +210,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!-- Ajoutez ici vos CardView avec ImageView pour la première HorizontalScrollView -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView1_1"
                 android:layout_width="170dp"
@@ -346,7 +345,7 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAction">
+        app:layout_constraintTop_toBottomOf="@+id/textViewRomance">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -354,34 +353,46 @@
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView3"
+                android:id="@+id/cardView1_4"
                 android:layout_width="170dp"
                 android:layout_height="80dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent">
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp">
 
                 <ImageView
-                    android:id="@+id/imageView7"
+                    android:id="@+id/imageView1_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/slide4" />
+                    android:src="@drawable/slide2" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardView1_5"
                 android:layout_width="170dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="14dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toEndOf="@+id/cardView2">
+                android:layout_marginTop="12dp">
 
                 <ImageView
-                    android:id="@+id/imageView8"
+                    android:id="@+id/imageView1_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/slide3" />
+                    android:src="@drawable/slide1" />
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView1_6"
+                android:layout_width="170dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp">
+
+                <ImageView
+                    android:id="@+id/imageView1_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/slide2" />
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
     </HorizontalScrollView>
 
