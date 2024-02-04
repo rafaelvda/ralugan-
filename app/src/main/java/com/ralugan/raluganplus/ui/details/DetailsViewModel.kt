@@ -1,42 +1,28 @@
-package com.ralugan.raluganplus
+package com.ralugan.raluganplus.ui.details
 
-import android.content.Intent
-import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.ralugan.raluganplus.api.ApiClient
 import com.ralugan.raluganplus.api.WikidataApi
+import com.ralugan.raluganplus.dataclass.DetailsItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
-import com.ralugan.raluganplus.dataclass.DetailsItem
-import com.ralugan.raluganplus.DetailsAdapter
-import kotlinx.coroutines.withContext
 
-class DetailsActivity : AppCompatActivity() {
+class DetailsViewModel(private val title: String) : ViewModel() {
 
     private val wikidataApi: WikidataApi = ApiClient.getWikidataApi()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_details)
+    private val _detailsItemList = MutableLiveData<List<DetailsItem>>()
+    val detailsItemList: LiveData<List<DetailsItem>> get() = _detailsItemList
 
-        // Retrieve the title from the Intent
-        val title = intent.getStringExtra("TITLE")
-
-        // Now, you can use the title as needed in your DetailsActivity
-        Log.d("DetailsActivity", "Received title: $title")
-
+    fun fetchDetails() {
         val sparqlQuery = """
             SELECT ?itemLabel ?pic ?note ?award ?cost ?date ?dir ?duration ?episodes ?seasons ?genre
             WHERE {
@@ -98,24 +84,15 @@ class DetailsActivity : AppCompatActivity() {
 
                 // Utilisez Dispatchers.Main pour passer au thread principal
                 withContext(Dispatchers.Main) {
-                    Log.d("DetailsActivity", response.toString())
-                    Log.d("DetailsActivity", "111111")
-
-                    // Call the method directly, as you're already on the main thread
                     handleApiResponse(response)
                 }
             } catch (e: Exception) {
-                Log.d("DetailsActivity", "222222 $e")
                 // Gérer l'exception
             }
         }
-
     }
 
     private fun handleApiResponse(response: Response<ResponseBody>) {
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
         if (response.isSuccessful) {
             try {
                 val jsonResult = JSONObject(response.body()?.string())
@@ -127,19 +104,6 @@ class DetailsActivity : AppCompatActivity() {
 
                     if (bindings.length() > 0) {
                         val firstBinding = bindings.getJSONObject(0) // Récupérez le premier élément seulement
-
-                        Log.d("DetailsActivity", "Item #0")
-                        Log.d("DetailsActivity", "itemLabel: ${firstBinding.getJSONObject("itemLabel").getString("value")}")
-                        Log.d("DetailsActivity", "pic: ${firstBinding.optJSONObject("pic")?.getString("value")}")
-                        Log.d("DetailsActivity", "note: ${firstBinding.optJSONObject("note")?.getString("value")}")
-                        Log.d("DetailsActivity", "award: ${firstBinding.optJSONObject("award")?.getString("value")}")
-                        Log.d("DetailsActivity", "cost: ${firstBinding.optJSONObject("cost")?.getString("value")}")
-                        Log.d("DetailsActivity", "date: ${firstBinding.optJSONObject("date")?.getString("value")}")
-                        Log.d("DetailsActivity", "dir: ${firstBinding.optJSONObject("dir")?.getString("value")}")
-                        Log.d("DetailsActivity", "duration: ${firstBinding.optJSONObject("duration")?.getString("value")}")
-                        Log.d("DetailsActivity", "episodes: ${firstBinding.optJSONObject("episodes")?.getString("value")}")
-                        Log.d("DetailsActivity", "seasons: ${firstBinding.optJSONObject("seasons")?.getString("value")}")
-                        Log.d("DetailsActivity", "genre: ${firstBinding.optJSONObject("genre")?.getString("value")}")
 
                         val itemLabel = firstBinding.getJSONObject("itemLabel").optString("value", "N/A")
                         val pic = firstBinding.optJSONObject("pic")?.optString("value", "N/A")
@@ -169,10 +133,7 @@ class DetailsActivity : AppCompatActivity() {
                         detailsItemList.add(detailsItem)
                     }
 
-                    val adapter = DetailsAdapter(detailsItemList)
-                    recyclerView.adapter = adapter
-                } else {
-                    // Handle the case where there are no results
+                    _detailsItemList.postValue(detailsItemList)
                 }
             } catch (e: JSONException) {
                 // Handle JSON parsing error
@@ -181,6 +142,4 @@ class DetailsActivity : AppCompatActivity() {
             // Handle API call failure
         }
     }
-
-
 }

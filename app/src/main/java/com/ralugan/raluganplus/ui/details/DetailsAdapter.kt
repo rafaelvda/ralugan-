@@ -1,6 +1,5 @@
-package com.ralugan.raluganplus
+package com.ralugan.raluganplus.ui.details
 
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.ralugan.raluganplus.R
 import com.ralugan.raluganplus.dataclass.DetailsItem
 
-class DetailsAdapter(private val detailsItemList: List<DetailsItem>) :
+class DetailsAdapter(private var detailsItemList: List<DetailsItem>) :
     RecyclerView.Adapter<DetailsAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -51,17 +51,22 @@ class DetailsAdapter(private val detailsItemList: List<DetailsItem>) :
         if (!detailsItem.pic.isNullOrBlank()) {
             Glide.with(holder.itemView.context)
                 .load(detailsItem.pic)
-                .error(R.drawable.ic_launcher_background)
+                .error(R.drawable.ralugan)
                 .into(holder.imageView)
         } else {
             Glide.with(holder.itemView.context)
-                .load(R.drawable.ic_launcher_foreground)
+                .load(R.drawable.ralugan)
                 .into(holder.imageView)
         }
     }
 
     override fun getItemCount(): Int {
         return detailsItemList.size
+    }
+
+    fun updateData(newList: List<DetailsItem>) {
+        detailsItemList = newList
+        notifyDataSetChanged()
     }
 }
 
