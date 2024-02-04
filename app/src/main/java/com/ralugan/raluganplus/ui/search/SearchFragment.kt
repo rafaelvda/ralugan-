@@ -11,7 +11,7 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.ralugan.raluganplus.DetailsActivity
+import com.ralugan.raluganplus.ui.details.DetailsActivity
 import com.ralugan.raluganplus.R
 import com.ralugan.raluganplus.api.ApiClient
 import com.ralugan.raluganplus.api.WikidataApi
